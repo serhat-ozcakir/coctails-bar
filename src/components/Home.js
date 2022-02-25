@@ -4,48 +4,44 @@ import { ContextBarContext } from "../context/ContextBar";
 const Home = () => {
   const { cocktails, ingredients, glasses, categories, alcoholic_types } =
     useContext(ContextBarContext);
+  
+   
 
   const [drinks, setDrinks] = useState({
     category: "",
     drinkType: "",
     glassType: "",
+ 
   });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDrinks({ ...drinks, [name]: value });
-
   };
 
-  
+  const filterDrink = cocktails?.drinks?.filter((item) => {
+    if (
+      item?.strCategory === drinks?.category &&
+      item?.strAlcoholic === drinks?.drinkType &&
+      item?.strGlass === drinks?.glassType 
+      
+    ) {
+      return true;
+    }
+  });
 
-cocktails?.drinks?.map((item)=>{
-  console.log(item?.strGlass);
-  // console.log(drinks?.glassType);
-  item?.strGlass === drinks?.glassType ? console.log("true") : console.log("false")
-})
+  // const handleSubmit = (e) => {
+  //   e.preventdefault()
+  //   filterDrink.push(filtered)
 
-  //   function filterById(item) {
-  //     if (item?.strIngredient1 === ) {
-  //         return true;
-  //     }
-  // }
-
-  // const arrById = ingredients?.filter((item) => {
-  //   if (Object.values(cocktails.drinks[0]).includes(item?.strIngredient1)) {
-  //     return true;
-  //   }
-  // });
-
-  // console.log("drinks :>> ", cocktails.drinks);
+  // };
 
   return (
     <div className="row">
       <div className="col-xl-4 col-sm-12">
         <form
           className="container w-50 mt-5"
-          //   onSubmit={handleSubmit}
-          method="POST"
-          //   action="http://127.0.0.1:8000/linktree_list"
+          // onSubmit={handleSubmit}
         >
           <div>
             <h1>Order a drink</h1>
@@ -59,19 +55,19 @@ cocktails?.drinks?.map((item)=>{
               className="form-control"
               id="name"
               name="name"
-              //   value={inputs.name || ""}
-              //   onChange={handleChange}
+              value={drinks.name}
+                onChange={handleChange}
             />
           </div>
           <div className=" mb-3 ">
-            <label for="title" className="form-label">
+            <label for="full name" className="form-label">
               Full Name
             </label>
             <input
               type="text"
               class="form-control"
               id="title"
-              name="title"
+              name="full name"
               required
               //   value={inputs.title || ""}
               //   onChange={handleChange}
@@ -112,8 +108,9 @@ cocktails?.drinks?.map((item)=>{
               aria-label="Example select with button addon"
               onChange={handleChange}
               name="category"
+              required
             >
-              <option selected disabled>
+              <option value="" selected disabled>
                 Category
               </option>
 
@@ -129,8 +126,9 @@ cocktails?.drinks?.map((item)=>{
               aria-label="Example select with button addon"
               onChange={handleChange}
               name="drinkType"
+              required
             >
-              <option selected disabled>
+              <option value="" selected disabled>
                 Type of drink
               </option>
               {alcoholic_types?.drinks?.map((item) => (
@@ -145,8 +143,9 @@ cocktails?.drinks?.map((item)=>{
               aria-label="Example select with button addon"
               onChange={handleChange}
               name="glassType"
+              required
             >
-              <option selected disabled>
+              <option value="" selected disabled>
                 Type of glass
               </option>
               {glasses?.drinks?.map((item) => (
@@ -156,11 +155,12 @@ cocktails?.drinks?.map((item)=>{
           </div>
 
           <div className=" mb-3 ">
-            <label for="title" className="form-label">
+            {/* <label for="title" className="form-label">
               Ingredients
             </label>
-            <br />
-            <input
+            <br /> */}
+     
+            {/* <input
               type="checkbox"
               // class="form-control"
               id="title"
@@ -168,28 +168,26 @@ cocktails?.drinks?.map((item)=>{
               required
               //   value={inputs.title || ""}
               //   onChange={handleChange}
-            />
+            /> */}
           </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
+          {/* <button
+           onClick={()=>setClicked(true)}
+            className="btn btn-primary">
+            Search
+          </button> */}
         </form>
       </div>
-      <div className="col-xl-4 col-sm-12">
-        <div class="card mt-5">
-          <img src="..." class="card-img-top" alt="..." />
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <a href="#" class="btn btn-primary">
-              Go somewhere
-            </a>
+      {filterDrink?.map((item) => (
+        <div className="col-xl-4 col-sm-12">
+          <div class="card mt-5">
+            <img src={item.strDrinkThumb} class="card-img-top" alt="..." />
+            <div class="card-body">
+              <h5 class="card-title">{item.strDrink}</h5>
+              <p class="card-text">{item.strInstructions}</p>
+            </div>
           </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 };
