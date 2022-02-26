@@ -4,15 +4,14 @@ import { ContextBarContext } from "../context/ContextBar";
 const Home = () => {
   const { cocktails, ingredients, glasses, categories, alcoholic_types } =
     useContext(ContextBarContext);
-  
-   
 
-  const [drinks, setDrinks] = useState({
-    category: "",
-    drinkType: "",
-    glassType: "",
- 
-  });
+  const [drinks, setDrinks] = useState([
+    { category: "", drinkType: "", glassType: "" },
+  ]);
+  console.log("cocktails :>> ", cocktails.drinks);
+
+  console.log("drinks :>> ", drinks);
+  const [filteredDrink, setFilteredDrink] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,27 +22,25 @@ const Home = () => {
     if (
       item?.strCategory === drinks?.category &&
       item?.strAlcoholic === drinks?.drinkType &&
-      item?.strGlass === drinks?.glassType 
-      
+      item?.strGlass === drinks?.glassType
     ) {
       return true;
     }
   });
+  console.log("filterDrink :>> ", filterDrink);
 
-  // const handleSubmit = (e) => {
-  //   e.preventdefault()
-  //   filterDrink.push(filtered)
-
-  // };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFilteredDrink(filterDrink);
+    console.log(filteredDrink);
+    setDrinks("");
+  };
 
   return (
     <div className="row">
       <div className="col-xl-4 col-sm-12">
-        <form
-          className="container w-50 mt-5"
-          // onSubmit={handleSubmit}
-        >
-          <div>
+        <form className="container w-50 mt-5" onSubmit={handleSubmit}>
+          <div className="">
             <h1>Order a drink</h1>
           </div>
           <div className=" mb-3 ">
@@ -56,7 +53,9 @@ const Home = () => {
               id="name"
               name="name"
               value={drinks.name}
-                onChange={handleChange}
+              onChange={handleChange}
+              required
+              placeholder="Cocktail name.."
             />
           </div>
           <div className=" mb-3 ">
@@ -67,10 +66,11 @@ const Home = () => {
               type="text"
               class="form-control"
               id="title"
-              name="full name"
+              name="full_name"
               required
-              //   value={inputs.title || ""}
-              //   onChange={handleChange}
+              placeholder="Full name.."
+              value={drinks.full_name}
+              onChange={handleChange}
             />
           </div>
           <div className=" mb-3 ">
@@ -81,10 +81,11 @@ const Home = () => {
               type="text"
               className="form-control"
               id="url"
-              name="url_name"
+              name="phone_name"
               required
-              //   value={inputs.url_name || ""}
-              //   onChange={handleChange}
+              placeholder="Number.."
+              value={drinks.phone_number}
+              onChange={handleChange}
             />
           </div>
           <div className=" mb-3 ">
@@ -95,10 +96,11 @@ const Home = () => {
               type="text"
               className="form-control"
               id="url"
-              name="url_name"
+              name="email_name"
               required
-              //   value={inputs.url_name || ""}
-              //   onChange={handleChange}
+              placeholder="Email adress.."
+              value={drinks.email_name}
+              onChange={handleChange}
             />
           </div>
           <div class="input-group mb-3">
@@ -159,7 +161,7 @@ const Home = () => {
               Ingredients
             </label>
             <br /> */}
-     
+
             {/* <input
               type="checkbox"
               // class="form-control"
@@ -170,23 +172,32 @@ const Home = () => {
               //   onChange={handleChange}
             /> */}
           </div>
-          {/* <button
-           onClick={()=>setClicked(true)}
-            className="btn btn-primary">
+          <button
+            type="submit"
+            // onClick={handleSubmit}
+            // className="btn btn-primary"
+            className="btn btn-primary"
+          >
             Search
-          </button> */}
+          </button>
         </form>
       </div>
-      {filterDrink?.map((item) => (
-        <div className="col-xl-4 col-sm-12">
-          <div class="card mt-5">
-            <img src={item.strDrinkThumb} class="card-img-top" alt="..." />
-            <div class="card-body">
+      {filteredDrink?.map((item) => (
+        // <div className="container">
+          <div className="col-xl-4 col-sm-12">
+            <div class="card mt-5 p-3 mx-3" style={{ minHeight: 420 }}>
+              <img
+                src={item.strDrinkThumb}
+                class="card-img-top"
+                alt="..."
+                style={{ height: 250 }}
+              />
               <h5 class="card-title">{item.strDrink}</h5>
               <p class="card-text">{item.strInstructions}</p>
+              <div class="card-body"></div>
             </div>
           </div>
-        </div>
+        // </div>
       ))}
     </div>
   );
