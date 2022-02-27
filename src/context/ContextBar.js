@@ -1,6 +1,9 @@
 import React, { useState, createContext, useEffect } from "react";
 import axios from "axios";
 
+
+
+
 export const ContextBarContext = createContext()
 
 function ContextBarContextProvider({ children }) {
@@ -9,6 +12,9 @@ function ContextBarContextProvider({ children }) {
     const [glasses, setGlasses] = useState([])
     const [categories, setCategories] = useState([])
     const [alcoholic_types, setAlcoholic_types] = useState([])
+
+
+    
   
     // console.log(cocktails);
     // console.log(ingredients);
