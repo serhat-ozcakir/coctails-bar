@@ -93,7 +93,7 @@ const Home = () => {
               className="form-control"
               id="url"
               name="phone_name"
-              required
+              required 
               placeholder="Number.."
               value={drinks.phone_number}
               onChange={handleChange}
@@ -194,7 +194,7 @@ const Home = () => {
             )} 
             </div>
             </div> */}
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary mb-2">
             Search
           </button>
         </form>
