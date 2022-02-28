@@ -125,7 +125,7 @@ const Home = () => {
               Email adress
             </label>
             <input
-              type="text"
+              type="email"
               className="form-control"
               id="url"
               name="email_name"
