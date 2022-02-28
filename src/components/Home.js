@@ -2,35 +2,41 @@ import React, { useState, useContext } from "react";
 import { ContextBarContext } from "../context/ContextBar";
 import logo from "../image/3747371.jpg";
 import newLogo from "../image/iced-cocktails-drinking-glass.jpg";
-
+const initialState =  [
+  { category: "", drinkType: "", glassType: "", ingType: "" },
+]
 const Home = () => {
   const { cocktails, ingredients, glasses, categories, alcoholic_types } =
     useContext(ContextBarContext);
 
-  const [drinks, setDrinks] = useState([
-    { category: "", drinkType: "", glassType: "" },
-  ]);
-
+  const [drinks, setDrinks] = useState(initialState);
+  const [filteredIng, setFilteredIng] = useState([]);
   const [filteredDrink, setFilteredDrink] = useState([]);
   const [main, setMain] = useState(true);
   const [enter, setEnter] = useState(true);
-  // console.log(ingredients);
+  // console.log(ingredients.drinks.length);
 
+  // console.log(Object.entries(filteredIng)[1][1])
+  const onIng = (e) => 
+   filteredIng.includes(e.target.value) ? null : setFilteredIng([...filteredIng, e.target.value]);
+    // console.log('e :>> ', e);
+  ;
+
+  // console.log('filteredIng', filteredIng)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDrinks({ ...drinks, [name]: value });
-
-    // setIng({...ing, [name]: value })
   };
+
+  // console.log('FilteredIng :>> ', filteredIng);
 
   const filterDrink = cocktails?.drinks?.filter((item) => {
     if (
       item?.strCategory === drinks?.category &&
       item?.strAlcoholic === drinks?.drinkType &&
-      item?.strGlass === drinks?.glassType
-      //  &&
-      // item?.strIngredient1 === drinks?.ingType
+      item?.strGlass === drinks?.glassType &&
+      item?.strIngredient1 === drinks?.ingType
     ) {
       return true;
     }
@@ -41,17 +47,32 @@ const Home = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setFilteredDrink(filterDrink);
+    e.target.children[1].children[1].value = ""
+    e.target.children[2].children[1].value = ""
+    e.target.children[3].children[1].value = ""
+    e.target.children[4].children[1].value = ""
+    e.target.children[5].children[0].children[0].selected = true
+    e.target.children[6].children[0].children[0].selected = true
+    e.target.children[7].children[0].children[0].selected = true
+    e.target.children[8].children[0].children[0].selected = true
+    // console.log('e :>> ', e.target.children[5].children[0].children[0].selected );
     setEnter(false);
     if (filterDrink.length == 0) {
       setMain(false);
     }
+    setDrinks(initialState)
+    
   };
+
+  // console.log(filteredIng.includes(drinks?.ingType));
+  // console.log(drinks?.ingType);
+  // console.log(filteredIng[1]);
 
   return (
     <div className="row">
       <div className="col-xl-4 col-sm-12">
         <form className="container w-50 mt-5 border" onSubmit={handleSubmit}>
-          <div >
+          <div>
             <h1 className="text-primary fs-2">Order a drink</h1>
           </div>
           <div className=" mb-3 ">
@@ -85,15 +106,15 @@ const Home = () => {
             />
           </div>
           <div className=" mb-3 ">
-            <label htmlFor="url" className="form-label">
+            <label htmlFor="phone_name" className="form-label">
               Phone number
             </label>
             <input
               type="text"
               className="form-control"
-              id="url"
+              id="phone_name"
               name="phone_name"
-              required 
+              required
               placeholder="Number.."
               value={drinks.phone_number}
               onChange={handleChange}
@@ -172,28 +193,38 @@ const Home = () => {
               ))}
             </select>
           </div>
-          {/* 
-          <div class="input-group mb-3">
+
+          <div className="input-group mb-3">
             <select
-              class="form-select"
+              className="form-select"
               id="inputGroupSelect03"
               aria-label="Example select with button addon"
-              onChange={handleIng}
+              onChange={handleChange}
               name="ingType"
-              required
+              onClick={onIng}
             >
               <option value="" selected disabled>
-                İngridients
+                Ingridients
               </option>
-              {ingredients?.drinks?.map((item) => (
-                <option value={item?.strIngredient1}>{item?.strIngredient1}</option>
+              {ingredients?.drinks?.map((item,index) => (
+                <option
+                  // onClick={onIng}
+                  key={index}
+                  value={item?.strIngredient1}
+                >
+                  {item?.strIngredient1}
+                </option>
               ))}
             </select>
-            <div>
 
-            )} 
-            </div>
-            </div> */}
+            <div></div>
+          </div>
+          <div>
+            {!enter ? null :
+            filteredIng?.map((item, index) =>
+              !item ? null : <li className="list-group-item list-group-item-primary mb-2" key={index}>{item}</li>
+            )}
+          </div>
           <button type="submit" className="btn btn-primary mb-2">
             Search
           </button>
@@ -211,7 +242,7 @@ const Home = () => {
             </h5>
             <img
               src={newLogo}
-              class="card-img-top"
+              className="card-img-top"
               alt="..."
               style={{ height: 250 }}
               className="mt-2"
