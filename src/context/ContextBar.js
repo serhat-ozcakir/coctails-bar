@@ -66,6 +66,9 @@ function ContextBarContextProvider({ children }) {
       
     }, []);
   
+const HomeApp = ()=>{
+  
+}
 
     const values = {cocktails, ingredients, glasses, categories, alcoholic_types };
     return (

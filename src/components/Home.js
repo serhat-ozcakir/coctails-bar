@@ -2,9 +2,18 @@ import React, { useState, useContext } from "react";
 import { ContextBarContext } from "../context/ContextBar";
 import logo from "../image/3747371.jpg";
 import newLogo from "../image/iced-cocktails-drinking-glass.jpg";
-const initialState =  [
-  { category: "", drinkType: "", glassType: "", ingType: "" },
-]
+const initialState = [
+  {
+    category: "",
+    drinkType: "",
+    glassType: "",
+    ingType1: "",
+    ingType2: "",
+    ingType3: "",
+    ingType4: "",
+    ingType5: "",
+  },
+];
 const Home = () => {
   const { cocktails, ingredients, glasses, categories, alcoholic_types } =
     useContext(ContextBarContext);
@@ -17,51 +26,78 @@ const Home = () => {
   // console.log(ingredients.drinks.length);
 
   // console.log(Object.entries(filteredIng)[1][1])
-  const onIng = (e) => 
-   filteredIng.includes(e.target.value) ? null : setFilteredIng([...filteredIng, e.target.value]);
-    // console.log('e :>> ', e);
-  ;
-
+  const onIng = (e) =>
+    filteredIng.includes(e.target.value)
+      ? null
+      : setFilteredIng([...filteredIng, e.target.value]);
+  // console.log('e :>> ', e);
   // console.log('filteredIng', filteredIng)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDrinks({ ...drinks, [name]: value });
+    // console.log("drinks", drinks);
   };
+  // console.log('itemStr :>> ', item?.strIngredient2);
 
-  // console.log('FilteredIng :>> ', filteredIng);
-
+  // console.log(cocktails?.drinks);
   const filterDrink = cocktails?.drinks?.filter((item) => {
+    // console.log('FilteredIng :>> ', filteredIng);
     if (
       item?.strCategory === drinks?.category &&
       item?.strAlcoholic === drinks?.drinkType &&
       item?.strGlass === drinks?.glassType &&
-      item?.strIngredient1 === drinks?.ingType
+      (item?.strIngredient1 === drinks?.ingType1 ||
+        drinks?.ingType2 ||
+        drinks?.ingType3 ||
+        drinks?.ingType4 ||
+        drinks?.ingType5 ||
+        item?.strIngredient2 === drinks?.ingType1 ||
+        drinks?.ingType2 ||
+        drinks?.ingType3 ||
+        drinks?.ingType4 ||
+        drinks?.ingType5 ||
+        item?.strIngredient3 === drinks?.ingType1 ||
+        drinks?.ingType2 ||
+        drinks?.ingType3 ||
+        drinks?.ingType4 ||
+        drinks?.ingType5 ||
+        item?.strIngredient4 === drinks?.ingType1 ||
+        drinks?.ingType2 ||
+        drinks?.ingType3 ||
+        drinks?.ingType4 ||
+        drinks?.ingType5 ||
+        item?.strIngredient5 === drinks?.ingType1 ||
+        drinks?.ingType2 ||
+        drinks?.ingType3 ||
+        drinks?.ingType4 ||
+        drinks?.ingType5)
     ) {
       return true;
     }
   });
 
-  // console.log("filterDrink :>> ", filterDrink);
+  // console.log("filteredDrink :>> ", filteredDrink);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setFilteredDrink(filterDrink);
-    e.target.children[1].children[1].value = ""
-    e.target.children[2].children[1].value = ""
-    e.target.children[3].children[1].value = ""
-    e.target.children[4].children[1].value = ""
-    e.target.children[5].children[0].children[0].selected = true
-    e.target.children[6].children[0].children[0].selected = true
-    e.target.children[7].children[0].children[0].selected = true
-    e.target.children[8].children[0].children[0].selected = true
+    e.target.children[1].children[1].value = "";
+    e.target.children[2].children[1].value = "";
+    e.target.children[3].children[1].value = "";
+    e.target.children[4].children[1].value = "";
+    e.target.children[5].children[0].children[0].selected = true;
+    e.target.children[6].children[0].children[0].selected = true;
+    e.target.children[7].children[0].children[0].selected = true;
+    e.target.children[8].children[0].children[0].selected = true;
     // console.log('e :>> ', e.target.children[5].children[0].children[0].selected );
     setEnter(false);
     if (filterDrink.length == 0) {
       setMain(false);
     }
-    setDrinks(initialState)
-    
+    setDrinks(initialState);
+    // console.log(drinks);
+    // console.log(drinks?.ingType1, drinks?.ingType2);
   };
 
   // console.log(filteredIng.includes(drinks?.ingType));
@@ -106,14 +142,14 @@ const Home = () => {
             />
           </div>
           <div className=" mb-3 ">
-            <label htmlFor="phone_name" className="form-label">
+            <label htmlFor="phone_number" className="form-label">
               Phone number
             </label>
             <input
               type="text"
               className="form-control"
-              id="phone_name"
-              name="phone_name"
+              id="phone_number"
+              name="phone_number"
               required
               placeholder="Number.."
               value={drinks.phone_number}
@@ -125,7 +161,7 @@ const Home = () => {
               Email adress
             </label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="url"
               name="email_name"
@@ -200,13 +236,13 @@ const Home = () => {
               id="inputGroupSelect03"
               aria-label="Example select with button addon"
               onChange={handleChange}
-              name="ingType"
+              name={`ingType${filteredIng.length}`}
               onClick={onIng}
             >
               <option value="" selected disabled>
                 Ingridients
               </option>
-              {ingredients?.drinks?.map((item,index) => (
+              {ingredients?.drinks?.map((item, index) => (
                 <option
                   // onClick={onIng}
                   key={index}
@@ -220,14 +256,24 @@ const Home = () => {
             <div></div>
           </div>
           <div>
-            {!enter ? null :
-            filteredIng?.map((item, index) =>
-              !item ? null : <li className="list-group-item list-group-item-primary mb-2" key={index}>{item}</li>
-            )}
+            {!enter
+              ? null
+              : filteredIng?.map((item, index) =>
+                  !item ? null : (
+                    <li
+                      className="list-group-item list-group-item-primary mb-2"
+                      key={index}
+                    >
+                      {item}
+                    </li>
+                  )
+                )}
           </div>
-          <button type="submit" className="btn btn-primary mb-2">
-            Search
-          </button>
+          <div className="text-center">
+            <button type="submit" className="btn btn-primary mb-2">
+              Search
+            </button>
+          </div>
         </form>
       </div>
 
@@ -247,7 +293,7 @@ const Home = () => {
               style={{ height: 250 }}
               className="mt-2"
             />
-            <p className="mt-2 fst-italic fw-bold">
+            <p className="mt-2 fst-italic fw-bold text-success">
               Delicious drinks await you. You can choose very special drinks for
               yourself at the Cocktail Bar. All you have to do is set your
               wishes and then enjoy yourself...
@@ -278,7 +324,7 @@ const Home = () => {
             className="card mt-5 p-3 mx-3"
             style={{ minHeight: 440, minWidth: 600 }}
           >
-            <h5 className="card-title mt-1 text-center text-danger">
+            <h5 className="card-title mt-1 text-center text-primary fs-4">
               Sorry, no beverage found matching your search criteria.
             </h5>
             <img
