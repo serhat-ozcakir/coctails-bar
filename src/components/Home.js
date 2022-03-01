@@ -2,6 +2,11 @@ import React, { useState, useContext } from "react";
 import { ContextBarContext } from "../context/ContextBar";
 import logo from "../image/3747371.jpg";
 import newLogo from "../image/iced-cocktails-drinking-glass.jpg";
+
+// I created the initial data in the initialState and accordingly
+// I edited my page with the help of higher order functions such as map() and filter() in Home.js at the relevant places.
+// I used the bootstrap5  while designing the page and I also created a responsive design
+
 const initialState = [
   {
     category: "",

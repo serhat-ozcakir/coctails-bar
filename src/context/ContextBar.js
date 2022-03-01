@@ -1,8 +1,9 @@
 import React, { useState, createContext, useEffect } from "react";
 import axios from "axios";
 
-
-
+// I preferred to use the contex API structure while making this application.
+// First, I pulled all the data from the API into the context structure
+// I wrapped the structure I built with context and sent it to Home.js
 
 export const ContextBarContext = createContext()
 
@@ -66,9 +67,6 @@ function ContextBarContextProvider({ children }) {
       
     }, []);
   
-const HomeApp = ()=>{
-  
-}
 
     const values = {cocktails, ingredients, glasses, categories, alcoholic_types };
     return (
